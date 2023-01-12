@@ -1,0 +1,12 @@
+.main-footer{
+    /* padding-top: 40vh; */
+    color: white;
+    background-color: tomato;
+    position: relative;
+    width: 100%;
+}
+
+.footer-content{
+    display: flex;
+    justify-content: space-between;
+}
