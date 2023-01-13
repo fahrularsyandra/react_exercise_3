@@ -28,14 +28,14 @@ class UserController{
             })
             const { error } = schema.validate(req.body)
             if (error) {
-                return res.status(401).json({data: error.details[0].message})
+                return res.status(500).json({data: error.details[0].message})
             }
             if(user){
                 const check = decryptPwd(password, user.password)
                 if(check){
                     let access_token = tokenGenerator({username: user.username, email: user.email})
                     console.log(access_token);
-                    return res.status(200).json({message: "Login success!", data: {user, token: access_token}})
+                    return res.status(200).json({message: "Login success!", data: {access_token: access_token}})
                 }
             }
             return res.status(200).json({message: "Email or password is not correct!"})

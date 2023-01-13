@@ -18,7 +18,6 @@ class DebtController {
     try {
       const schema = Joi.object({
         description: Joi.string().required(),
-        user_id: Joi.number().required(),
         amount: Joi.number().required(),
         status: Joi.number().required(),
       });
@@ -26,16 +25,22 @@ class DebtController {
       if (error) {
         return res.status(401).json({ message: error.details[0].message });
       }
-        const newDebt = await debt.create(req.body);
-        const newTransaction = await transaction.create({
+        const newDebt = await debt.create({
           description: req.body.description,
+          user_id: req.headers.user_id,
+          amount: req.body.amount,
+          status: 1
+        });
+        const newTransaction = await transaction.create({
+          description: newDebt.description,
           debt_id: newDebt.id,
-          user_id: newDebt.user_id,
+          user_id: req.headers.user_id,
           amount: newDebt.amount,
           status: 2,
         });
         res.json({
           message: "Success!",
+          data: newDebt
         });
     } catch (error) {
       res.json({ error: error });

@@ -1,45 +1,62 @@
-import axios from 'axios';
+import axios from "axios";
 
-const URL = "http://localhost:3000/api/transactions"
-
+const URL = "http://localhost:3000/api/transactions";
+const access_token = localStorage.getItem("access_token");
+const headers = {
+  headers: {
+    access_token: access_token,
+  },
+};
 const getTransactions = async (cb) => {
+  if (access_token) {
     try {
-        const transactions = await axios.get(URL)
-        console.log(transactions.data);
-        cb(transactions.data)  
+      const transactions = await axios.get(URL, headers);
+      console.log(transactions.data);
+      cb(transactions.data);
     } catch (error) {
-        cb({error : error.message})
+      cb({ error: error.message });
     }
-}
+  } else {
+    cb({ error: "Token expired" });
+  }
+};
 
-const create = async (data) => {
+const create = async (data, cb) => {
+  if (access_token) {
     try {
-        const transaction = await axios.post(URL, data)
-        console.log(transaction.data);
+      const transactions = await axios.post(URL, data, headers);
+      console.log(transactions.data);
+      cb(transactions.data);
     } catch (error) {
-        console.log(error);
+      cb({ error: error.message });
     }
-}
+  } else {
+    cb({ error: "Token expired" });
+  }
+};
 
 const update = async (cb) => {
-    try {
-        const transaction = await axios.get(URL)
-        console.log(transaction.data);
-        cb(transaction.data)
-    } catch (error) {
-        cb({error : error.message})
-    }
-}
+  try {
+    const transaction = await axios.get(URL);
+    console.log(transaction.data);
+    cb(transaction.data);
+  } catch (error) {
+    cb({ error: error.message });
+  }
+};
 
-const remove = async (id) => {
+const remove = async (id, cb) => {
+  if (access_token) {
     try {
-        await axios.get(`${URL}/${id}`)
+        console.log(id);
+      await axios.get(`${URL}/${id}`, headers);
+      cb({ data: "delete success" });
+
     } catch (error) {
-        return error
+      cb({ error: error });
     }
-}
-export {
-    getTransactions,
-    remove,
-    create
-}
+  } else {
+    cb({ error: "Token expired" });
+  }
+};
+export { getTransactions, remove, create };
