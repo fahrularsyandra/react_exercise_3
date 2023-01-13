@@ -9,6 +9,6 @@ const transactionRoutes = require('../routes/Transaction');
 route.use('/transactions', transactionRoutes)
 
 const userRoutes = require('../routes/User');
-route.use('/users', userRoutes)
+route.use('/auth', userRoutes)
 
 module.exports = route;

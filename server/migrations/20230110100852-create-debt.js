@@ -12,6 +12,9 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
+      user_id: {
+        type: Sequelize.INTEGER
+      },
       amount: {
         type: Sequelize.INTEGER
       },

@@ -2,6 +2,8 @@ const {User} = require("../models");
 const bcrypt = require('bcrypt');
 const { decryptPwd } = require("../helpers/bcrypt");
 const Joi = require("joi");
+const { tokenGenerator } = require("../helpers/jwt");
+const { use } = require("../routes");
 
 class UserController{
     static async getAll(req, res) {
@@ -31,7 +33,9 @@ class UserController{
             if(user){
                 const check = decryptPwd(password, user.password)
                 if(check){
-                    return res.status(200).json({message: "Login success!", data: user})
+                    let access_token = tokenGenerator({username: user.username, email: user.email})
+                    console.log(access_token);
+                    return res.status(200).json({message: "Login success!", data: {user, token: access_token}})
                 }
             }
             return res.status(200).json({message: "Email or password is not correct!"})
@@ -43,7 +47,7 @@ class UserController{
         try {
             const schema = Joi.object({
                 username: Joi.string().required(),
-                email: Joi.email().required(),
+                email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
                 password: Joi.string().required().min(7),
                 age: Joi.number().required()
             })

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { login } from '../axios/Auth'
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -7,6 +8,7 @@ const Login = () => {
   })
 
   const submitHandler = () => {
+    login(form)
     console.log(form)
   }
   return (

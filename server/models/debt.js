@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class debt extends Model {
     /**
@@ -15,16 +13,25 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "debt_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
-      })
+      });
+      debt.belongsTo(models.User, {
+        foreignKey: "user_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
     }
   }
-  debt.init({
-    description: DataTypes.STRING,
-    amount: DataTypes.INTEGER,
-    status: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'debt',
-  });
+  debt.init(
+    {
+      description: DataTypes.STRING,
+      user_id: DataTypes.INTEGER,
+      amount: DataTypes.INTEGER,
+      status: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "debt",
+    }
+  );
   return debt;
 };
